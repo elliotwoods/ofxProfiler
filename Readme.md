@@ -65,6 +65,9 @@ cout << ofxProfiler::getResults();
 
 ## Switching profiling on/off
 
+To switch off profiling, simply define `PROFILER_DISABLED` before including `ofxProfiler.h`.
+This makes all the macros used for profiling equal to whitespace.
+
 ### ON
 
 ```c++
@@ -73,9 +76,8 @@ cout << ofxProfiler::getResults();
 
 ### OFF
 
-PROFILER_DISABLED
 ```c++
-PROFILER_DISABLED
+#define PROFILER_DISABLED
 #include "ofxProfiler.h"
 ```
 
