@@ -1,13 +1,25 @@
 #pragma once
 
 #include "ofxProfiler/Activity.h"
+#include "ofxProfiler/Scope.h"
 
 namespace ofxProfiler {
-	#ifdef PROFILER_DISABLE
-		typedef ofxProfiler::NullActivity ActivitySwitched
-	#else
-		typedef ofxProfiler::Activity ActivitySwitched;
-	#endif
+	void begin(string activityName);
+	void end();
+	string getResults();
 }
 
-extern ofxProfiler::ActivitySwitched profile;
+#ifdef PROFILER_DISABLED
+	#define PROFILE_BEGIN(X) 
+
+	#define PROFILE_END() 
+
+	#define PROFILE_SCOPE(X)
+#else 
+	#define PROFILE_BEGIN(X) ofxProfiler::begin(X)
+
+	#define PROFILE_END() ofxProfiler::end()
+
+	#define PROFILE_SCOPE(X) auto scopedProfiler = ofxProfiler::Scope(X)
+#endif
+
