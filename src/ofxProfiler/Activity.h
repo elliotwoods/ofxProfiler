@@ -3,7 +3,10 @@
 #include <string>
 #include <unordered_map>
 #include <deque>
-#include <time.h>
+
+#include <chrono>
+#include <ctime>
+#include <ratio>
 
 #define OFXPROFILER_TEXT_WIDTH 20
 #define OFXPROFILER_BAR_WIDTH 20
@@ -14,6 +17,7 @@
 
 namespace ofxProfiler {
 	using namespace std;
+	using namespace std::chrono;
 
 	class Activity {
 		static Activity * root;
@@ -25,11 +29,12 @@ namespace ofxProfiler {
 		static deque<Activity*> & History();
 
 		Activity(string name = "");
-		virtual ~Activity();
+		~Activity();
 
-		virtual void begin();
-		virtual void end();
-		virtual void clear(); //doesn't clear the name
+		void begin();
+		void end();
+		void clear(); //doesn't clear the name, but deletes all children
+		void clearDuration(); //clear duration and in all children
 
 		const string & getName() const;
 
@@ -46,26 +51,9 @@ namespace ofxProfiler {
 			Active
 		} state;
 		
-		clock_t beginTime;
-		float duration;
+		high_resolution_clock::time_point beginTime;
+		double duration; //seconds
 
 		unordered_map<string, Activity*> subActivities;
 	};
-
-	class NullActivity : public Activity {
-	public:
-		void begin() override { }
-		void end() override { }
-		void clear() override { }
-		Activity & operator[](const string &) override {
-			return * this;
-		}
-	};
-
-
-#ifdef PROFILER_DISABLE
-	typedef ofxProfiler::NullActivity ActivitySwitched
-#else
-	typedef ofxProfiler::Activity ActivitySwitched;
-#endif
 }

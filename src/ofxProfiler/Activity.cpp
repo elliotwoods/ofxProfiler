@@ -36,8 +36,7 @@ namespace ofxProfiler {
 	Activity::Activity(string name) {
 		this->name = name;
 		this->state = Waiting;
-		this->beginTime = 0;
-		this->duration = 0.0f;
+		this->duration = 0.0;
 	}
 
 	//----------
@@ -54,24 +53,26 @@ namespace ofxProfiler {
 		
 		Activity::History().push_back(Activity::Current());
 		Activity::current = this;
-		this->state = Active;
 
-		this->beginTime = clock();
+		this->state = Active;
+		this->beginTime = high_resolution_clock::now();
 	}
 
 	//----------
 	void Activity::end() {
+		const auto now = high_resolution_clock::now();
+
 		if (this->state == Waiting) {
 			ofLogWarning("ofxProfiler::Activity::end") << "Cannot end activity [" << this->name << "] as it is not active.";
 			return;
 		}
-		const auto now = clock();
 		if (now < this->beginTime) {
 			ofLogError("ofxProfiler::Activity::end") << "Activity ended before it began";
 			return;
 		}
 
-		this->duration = float(now - this->beginTime) / float(CLOCKS_PER_SEC);
+		auto timeSpan = duration_cast<chrono::duration<double>>(now - this->beginTime);
+		this->duration += timeSpan.count();
 
 		Activity::Current() = Activity::History().back();
 		Activity::history->pop_back();
@@ -81,15 +82,24 @@ namespace ofxProfiler {
 	//----------
 	void Activity::clear() {
 		for (auto subActivity : this->subActivities) {
+			subActivity.second->clear();
 			delete subActivity.second;
 		}
 		this->subActivities.clear();
 
+		this->clearDuration();
+
 		this->state = Waiting;
-		this->beginTime = 0;
-		this->duration = 0.0f;
 	}
 
+	//----------
+	void Activity::clearDuration() {
+		this->duration = 0;
+
+		for (auto activity : this->subActivities) {
+			activity.second->clearDuration();
+		}
+	}
 	//----------
 	const string & Activity::getName() const {
 		return this->name;
@@ -220,7 +230,7 @@ namespace ofxProfiler {
 		//Print time
 		//--
 		//
-		os << " " << (this->duration * 1000.0f) << "ms";
+		os << " " << (this->duration * 1000.0, 1) << "ms";
 		//
 		//--
 
