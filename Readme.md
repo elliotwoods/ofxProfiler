@@ -19,6 +19,8 @@ PROFILE_END();
 To get a tree of tracked results (sub activities belong to larger activities), use the pattern:
 
 ```c++
+PROFILE_START_FRAME;
+
 PROFILE_BEGIN("My grouped activity");
 
 PROFILE_BEGIN("Activity 1");
@@ -42,6 +44,8 @@ If you think that `PROFILE_BEGIN` and `PROFILE_END` are messy, you can also used
 
 ```c++
 void update() {
+	PROFILE_START_FRAME;
+
 	PROFILE_SCOPE("update");
 
 	{
