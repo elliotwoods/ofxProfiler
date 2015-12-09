@@ -1,3 +1,5 @@
+!(https://raw.githubusercontent.com/elliotwoods/ofxProfiler/master/ofxaddons_thumbnail.png)
+
 # Usage
 
 ## Tracking profiling
