@@ -1,4 +1,4 @@
-!(https://raw.githubusercontent.com/elliotwoods/ofxProfiler/master/ofxaddons_thumbnail.png)
+![Thumbnail](https://raw.githubusercontent.com/elliotwoods/ofxProfiler/master/ofxaddons_thumbnail.png)
 
 # Usage
 
