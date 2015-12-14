@@ -15,10 +15,9 @@
 //		Activity performs all profiling
 //		NullActivity inherits all functions, and does nothing
 
-namespace ofxProfiler {
-	using namespace std;
-	using namespace std::chrono;
+using namespace std;
 
+namespace ofxProfiler {
 	class Activity {
 		static Activity * root;
 		static Activity * current;
@@ -36,6 +35,8 @@ namespace ofxProfiler {
 		void clear(); //doesn't clear the name, but deletes all children
 		void clearDuration(); //clear duration and in all children
 
+		double getDuration() const;
+
 		const string & getName() const;
 
 		virtual Activity & operator[](const string &);
@@ -51,7 +52,7 @@ namespace ofxProfiler {
 			Active
 		} state;
 		
-		high_resolution_clock::time_point beginTime;
+		chrono::high_resolution_clock::time_point beginTime;
 		double duration; //seconds
 
 		unordered_map<string, Activity*> subActivities;

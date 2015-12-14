@@ -2,6 +2,8 @@
 #include "ofLog.h"
 #include "ofUtils.h"
 
+using namespace std::chrono;
+
 namespace ofxProfiler {
 	//----------
 	Activity * Activity::root = nullptr;
@@ -100,6 +102,12 @@ namespace ofxProfiler {
 			activity.second->clearDuration();
 		}
 	}
+
+	//----------
+	double Activity::getDuration() const {
+		return this->duration;
+	}
+
 	//----------
 	const string & Activity::getName() const {
 		return this->name;
@@ -230,7 +238,7 @@ namespace ofxProfiler {
 		//Print time
 		//--
 		//
-		os << " " << (this->duration * 1000.0, 1) << "ms";
+		os << " " << ofToString(this->duration * 1000.0, 1) << "ms";
 		//
 		//--
 
