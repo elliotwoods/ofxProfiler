@@ -238,7 +238,7 @@ namespace ofxProfiler {
 		//Print time
 		//--
 		//
-		os << " " << ofToString(this->duration * 1000.0, 1) << "ms";
+		os << " " << ofToString(this->duration * 1000.0, 6) << "ms";
 		//
 		//--
 

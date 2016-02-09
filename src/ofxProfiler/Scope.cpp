@@ -8,6 +8,12 @@ namespace ofxProfiler {
 	}
 
 	//----------
+	Scope::Scope(Activity & activity) {
+		this->activity = &activity;
+		this->activity->begin();
+	}
+
+	//----------
 	Scope::~Scope() {
 		this->activity->end();
 	}
